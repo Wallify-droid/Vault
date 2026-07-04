@@ -14,18 +14,21 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
+      - name: Unzip the project
+        # This extracts your zip file so the server can access the code
+        run: unzip AppVault.zip
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.7' 
 
       - name: Build Debug APK
-        # The -p flag tells Gradle to run inside the AppVault directory
+        # Now this will successfully find the unzipped AppVault folder
         run: gradle assembleDebug -p AppVault
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          # We also updated the path here to include the AppVault folder
           path: AppVault/app/build/outputs/apk/debug/app-debug.apk
